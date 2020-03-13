@@ -1,0 +1,16 @@
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke: #000000;
+  stroke-width: 1px;
+}
+
+#topic-line-chart {
+  width: 100%;
+}
