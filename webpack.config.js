@@ -94,6 +94,8 @@ module.exports = {
     extensions: ['.js', '.scss']
   },
 
+  devtool: "eval-source-map",
+
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({

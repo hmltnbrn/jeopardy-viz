@@ -8,16 +8,16 @@ const margin = { top: 10, right: 20, bottom: 30, left: 30 };
 const width = 400 - margin.left - margin.right;
 const height = 200 - margin.top - margin.bottom;
 
-var parseDate = d3.timeParse("%Y");
+const parseDate = d3.timeParse("%Y");
 
-var xScale = d3.scaleTime().range([0, width]);
-var yScale = d3.scaleLinear().range([height, 0]);
-var color = d3.scaleOrdinal().range(d3.schemeCategory10);
+const xScale = d3.scaleTime().range([0, width]);
+const yScale = d3.scaleLinear().range([height, 0]);
+const color = d3.scaleOrdinal().range(d3.schemeCategory10);
 
-var xAxis = d3.axisBottom().scale(xScale);
-var yAxis = d3.axisLeft().scale(yScale);
+const xAxis = d3.axisBottom().scale(xScale);
+const yAxis = d3.axisLeft().scale(yScale);
 
-var line = d3
+const line = d3
   .line()
   .curve(d3.curveMonotoneX)
   .x(function(d) {
@@ -27,25 +27,36 @@ var line = d3
     return yScale(d.frequency);
   });
 
+  let clicked = false;
+
 const svg = d3.select('#topic-line-chart')
   .append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
     .call(responsive)
   .append('g')
-    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+    .attr('transform', `translate(${margin.left}, ${margin.top})`)
+    .on("click", () => {
+      if(clicked) {
+        d3.selectAll('.topic-line')
+          .style("opacity", 0.3);
+        clicked = false;
+      }
+    });
 
 d3.csv("../data/topics.csv").then(data => {
-  var topicData = d3.keys(data[0]).filter(key => {
+
+  const topicData = d3.keys(data[0]).filter(key => {
     return key !== "date";
   });
+
   color.domain(topicData);
 
   data.forEach(d => {
     d.date = parseDate(d.date);
   });
 
-  var frequencies = topicData.map(topic => {
+  const frequencies = topicData.map(topic => {
     return {
       topic: topic,
       datapoints: data.map(d => {
@@ -66,7 +77,7 @@ d3.csv("../data/topics.csv").then(data => {
     )
   );
 
-  var topics = svg
+  let topics = svg
     .selectAll(".topic")
     .data(frequencies)
     .enter()
@@ -75,7 +86,7 @@ d3.csv("../data/topics.csv").then(data => {
 
   topics
     .append("path")
-    .attr("class", "line")
+    .attr("class", "topic-line")
     .attr("d", d => {
       return line(d.datapoints);
     })
@@ -84,7 +95,8 @@ d3.csv("../data/topics.csv").then(data => {
     })
     .style("opacity", 0.2)
     .on("mouseover", handleMouseOver)
-    .on("mouseout", handleMouseOut);
+    .on("mouseout", handleMouseOut)
+    .on("click", handleClick);
 
   svg
     .append("g")
@@ -98,11 +110,19 @@ d3.csv("../data/topics.csv").then(data => {
     .call(yAxis);
 
   function handleMouseOver(d, i) {
-    d3.select(this).style("opacity", 1);
+    if(!clicked) d3.select(this).style("opacity", 1);
   }
 
   function handleMouseOut(d, i) {
-    d3.select(this).style("opacity", 0.2);
+    if(!clicked) d3.select(this).style("opacity", 0.2);
+  }
+
+  function handleClick(d, i) {
+    clicked = true;
+    svg.selectAll(".topic-line")
+      .style("opacity", 0.2);
+    d3.select(this).style("opacity", 1);
+    d3.event.stopPropagation();
   }
 
 });
