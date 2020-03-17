@@ -1,210 +1,117 @@
-// import * as d3 from "d3";
-// import * as q from "d3-queue";
+import * as d3 from "d3";
+import * as topojson from "topojson";
+import { responsive } from './helper';
 
-// q.queue()
-//   .defer(d3.csv, 'data/state-proportion.csv')
-//   .await(checkSize);
+import '../sass/states.scss';
 
-// var cachedWidth = window.innerWidth;
-// window.addEventListener('resize', function(){
-//   var newWidth = window.innerWidth;
-//   if(newWidth !== cachedWidth) {
-//     cachedWidth = newWidth;
-//     checkSize();
-//   }
-// });
-// window.addEventListener('orientationchange', checkSize);
+const toolDiv = d3.select("body")
+  .append("div")
+  .attr("class", "state-tooltip")
+  .style("opacity", 0);
 
-// var data;
-// var abrev;
-// var firstTime = true;
-// var mobile = false;
+const margin = { top: 10, right: 20, bottom: 30, left: 30 };
 
-// function checkSize(error, dataFull) {
-//   if(firstTime) {
-//     data = dataFull;
-//     firstTime = false;
-//   }
-//   if(screen.width <= 768 || window.innerWidth <= 768) {
-//     mobile = true;
-//   }
-//   else {
-//     mobile = false;
-//   }
-//   console.log(dataFull)
-//   // var url = new URLSearchParams(window.location.search);
-//   // var urlState = url.get("state");
-//   // var firstState;
-//   // if(urlState) {
-//   //   if(abrev[urlState.toUpperCase()]) {
-//   //     firstState = abrev[urlState.toUpperCase()]
-//   //       .split(' ')
-//   //       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-//   //       .join('');
-//   //   }
-//   //   else if(Object.values(abrev).map(val => val.toLowerCase()).indexOf(urlState.toLowerCase()) > -1) {
-//   //     firstState = urlState.toLowerCase()
-//   //       .split(' ')
-//   //       .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-//   //       .join('');
-//   //   }
-//   // }
-//   // renderMap(firstState);
-//   renderMap();
-// }
+const width = 960 - margin.left - margin.right;
+const height = 600 - margin.top - margin.bottom;
 
-// function renderMap() {
-//   //Width and height of map
-// var width = 960;
-// var height = 500;
+const svg = d3.select('#state-chart')
+  .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .call(responsive);
 
-// // D3 Projection
-// var projection = d3.geo.albersUsa()
-// 				   .translate([width/2, height/2])    // translate to center of screen
-// 				   .scale([1000]);          // scale things down so see entire US
-        
-// // Define path generator
-// var path = d3.geo.path()               // path generator that will convert GeoJSON to SVG paths
-// 		  	 .projection(projection);  // tell path generator to use albersUsa projection
+const map = d3.map();
+const stateNames = d3.map();
 
-		
-// // Define linear scale for output
-// // var color = d3.scale.linear()
-// // 			  .range(["rgb(213,222,217)","rgb(69,173,168)","rgb(84,36,55)","rgb(217,91,67)"]);
-// // console.log(d3.max(data, d => parseInt(d.contestants)))
-// var color = d3.scale.linear().domain([d3.min(data, d => parseInt(d.proportion)),d3.max(data, d => parseInt(d.proportion))])
-//   .interpolate(d3.interpolateHcl)
-//   .range([d3.rgb("#d9534f"), d3.rgb('#5cb85c')]);
+const path = d3.geoPath();
 
-// var legendText = ["Cities Lived", "States Lived", "States Visited", "Nada"];
+const color = d3.scaleSequential()
+  .interpolator(d3.interpolateBlues)
+  .domain([0, 100]);
 
-// //Create SVG element and append map to the SVG
-// var svg = d3.select("body")
-// 			.append("svg")
-// 			.attr("width", width)
-// 			.attr("height", height);
-        
-// // Append Div for tooltip to SVG
-// var div = d3.select("body")
-// 		    .append("div")   
-//     		.attr("class", "tooltip")               
-//     		.style("opacity", 0);
+const xScale = d3.scaleLinear()
+  .domain([0, 100])
+  .range([0, width/2]);
 
-// // Load in my states data!
-// // d3.csv("stateslived.csv", function(data) {
-// // color.domain([0,1,2,3]); // setting the range of the input data
+const g = svg.append("g")
+  .attr("class", "key")
+  .attr("transform", `translate(${width/2}, 10)`);
 
-// // Load GeoJSON data and merge with states data
-// d3.json("data/us-states.json", function(json) {
+g.selectAll("rect")
+  .data(Array.from(Array(100).keys()))
+  .enter()
+    .append("rect")
+      .attr("x", d => Math.floor(xScale(d)))
+      .attr("y", 0)
+      .attr("height", 10)
+      .attr("width", d => {
+        if (d == 100) {
+          return 6;
+        }
+        return Math.floor(xScale(d+1)) - Math.floor(xScale(d)) + 1;
+      })
+      .attr("fill", d => color(d));
 
-// // Loop through each state data value in the .csv file
-// for (var i = 0; i < data.length; i++) {
+g.append("text")
+    .attr("class", "caption")
+    .attr("x", width/4)
+    .attr("y", 0)
+    .attr("fill", "#000000")
+    .text("Proportion of population that has been a contestant on Jeopardy");
 
-// 	// Grab State Name
-// 	var dataState = data[i].state;
+g.call(d3.axisBottom(xScale)
+    .tickSize(15)
+    .tickFormat(d => { return d === 0 ? 'Lowest' : 'Highest'; })
+    .tickValues(color.domain()))
+  .select(".domain")
+    .remove();
 
-// 	// Grab data value 
-// 	var dataValue = data[i].proportion;
+const promises = [
+  d3.json("https://d3js.org/us-10m.v1.json"),
+  d3.tsv("../data/us-state-names.tsv", function(d) {
+    stateNames.set(d.id, d.name);
+  }),
+  d3.csv("../data/us-state-proportions.csv", function(d) { 
+    map.set(d.name, { proportion: +d.proportion, percentage: +d.percentage }); 
+  })
+]
 
-// 	// Find the corresponding state inside the GeoJSON
-// 	for (var j = 0; j < json.features.length; j++)  {
-// 		var jsonState = json.features[j].properties.name;
+Promise.all(promises).then(createMap)
 
-// 		if (dataState == jsonState) {
+function createMap([us]) {
+  svg.append("g")
+    .attr("class", "state-container")
+    .selectAll("path")
+    .data(topojson.feature(us, us.objects.states).features)
+    .enter().append("path")
+      .attr("fill", d => { 
+        let sn = stateNames.get(+d.id);
+        d.percentage = map.get(sn)["percentage"] || 0;
+        d.proportion = map.get(sn)["proportion"] || 0;
+        let col = color(d.percentage); 
+        if (col) {
+          return col;
+        } else {
+          return '#ffffff';
+        }
+      })
+      .attr("d", path)
+      .on("mouseover", d => {
+        toolDiv.transition()
+          .duration(200)
+          .style("opacity", .9);
+        toolDiv.html(`<h2>${stateNames.get(+d.id)}</h2>1 contestant per ${Math.round(d.proportion).toLocaleString()} people`)
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY - 28) + "px");
+      })
+      .on("mouseout", d => {
+        toolDiv.transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
 
-// 		// Copy the data value into the JSON
-// 		json.features[j].properties.visited = dataValue; 
-
-// 		// Stop looking through the JSON
-// 		break;
-// 		}
-// 	}
-// }
-		
-// // Bind the data to the SVG and create one path per GeoJSON feature
-// svg.selectAll("path")
-// 	.data(json.features)
-// 	.enter()
-// 	.append("path")
-// 	.attr("d", path)
-// 	.style("stroke", "#fff")
-// 	.style("stroke-width", "1")
-// 	.style("fill", function(d) {
-
-// 	// Get data value
-// 	var value = d.properties.visited;
-
-// 	if (value) {
-// 	//If value exists…
-// 	return color(value);
-// 	} else {
-// 	//If value is undefined…
-// 	return "rgb(213,222,217)";
-// 	}
-// });
-
-		 
-// // Map the cities I have lived in!
-// // d3.csv("cities-lived.csv", function(data) {
-
-// // svg.selectAll("circle")
-// // 	.data(data)
-// // 	.enter()
-// // 	.append("circle")
-// // 	.attr("cx", function(d) {
-// // 		return projection([d.lon, d.lat])[0];
-// // 	})
-// // 	.attr("cy", function(d) {
-// // 		return projection([d.lon, d.lat])[1];
-// // 	})
-// // 	.attr("r", function(d) {
-// // 		return Math.sqrt(d.years) * 4;
-// // 	})
-// // 		.style("fill", "rgb(217,91,67)")	
-// // 		.style("opacity", 0.85)	
-
-// // 	// Modification of custom tooltip code provided by Malcolm Maclean, "D3 Tips and Tricks" 
-// // 	// http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
-// // 	.on("mouseover", function(d) {      
-// //     	div.transition()        
-// //       	   .duration(200)      
-// //            .style("opacity", .9);      
-// //            div.text(d.place)
-// //            .style("left", (d3.event.pageX) + "px")     
-// //            .style("top", (d3.event.pageY - 28) + "px");    
-// // 	})   
-
-// //     // fade out tooltip on mouse out               
-// //     .on("mouseout", function(d) {       
-// //         div.transition()        
-// //            .duration(500)      
-// //            .style("opacity", 0);   
-// //     });
-// // });  
-        
-// // Modified Legend Code from Mike Bostock: http://bl.ocks.org/mbostock/3888852
-// // var legend = d3.select("body").append("svg")
-// //       			.attr("class", "legend")
-// //      			.attr("width", 140)
-// //     			.attr("height", 200)
-// //    				.selectAll("g")
-// //    				.data(color.domain().slice().reverse())
-// //    				.enter()
-// //    				.append("g")
-// //      			.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-// //   	legend.append("rect")
-// //    		  .attr("width", 18)
-// //    		  .attr("height", 18)
-// //    		  .style("fill", color);
-
-// //   	legend.append("text")
-// //   		  .data(legendText)
-// //       	  .attr("x", 24)
-// //       	  .attr("y", 9)
-// //       	  .attr("dy", ".35em")
-// //       	  .text(function(d) { return d; });
-// 	});
-
-// // });
-// }
+  svg.append("path")
+    .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+    .attr("class", "states")
+    .attr("d", path);
+}

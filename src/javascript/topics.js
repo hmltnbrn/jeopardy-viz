@@ -27,7 +27,7 @@ const line = d3
     return yScale(d.frequency);
   });
 
-  let clicked = false;
+var clicked = false;
 
 const svg = d3.select('#topic-line-chart')
   .append('svg')
@@ -35,14 +35,24 @@ const svg = d3.select('#topic-line-chart')
     .attr('height', height + margin.top + margin.bottom)
     .call(responsive)
   .append('g')
-    .attr('transform', `translate(${margin.left}, ${margin.top})`)
-    .on("click", () => {
-      if(clicked) {
-        d3.selectAll('.topic-line')
-          .style("opacity", 0.3);
-        clicked = false;
-      }
-    });
+    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+svg.on("click", () => {
+  if(clicked) {
+    d3.selectAll('.topic-line')
+      .style("opacity", 0.2);
+    clicked = false;
+  }
+});
+
+d3.select('body')
+  .on("click", () => {
+    if(clicked) {
+      d3.selectAll('.topic-line')
+        .style("opacity", 0.2);
+      clicked = false;
+    }
+  });
 
 d3.csv("../data/topics.csv").then(data => {
 
@@ -80,34 +90,33 @@ d3.csv("../data/topics.csv").then(data => {
   let topics = svg
     .selectAll(".topic")
     .data(frequencies)
-    .enter()
-    .append("g")
-    .attr("class", "topic");
+    .enter().append("g")
+      .attr("class", "topic");
 
   topics
     .append("path")
-    .attr("class", "topic-line")
-    .attr("d", d => {
-      return line(d.datapoints);
-    })
-    .style("stroke", d => {
-      return color(d.topic);
-    })
-    .style("opacity", 0.2)
-    .on("mouseover", handleMouseOver)
-    .on("mouseout", handleMouseOut)
-    .on("click", handleClick);
+      .attr("class", "topic-line")
+      .attr("d", d => {
+        return line(d.datapoints);
+      })
+      .style("stroke", d => {
+        return color(d.topic);
+      })
+      .style("opacity", 0.2)
+      .on("mouseover", handleMouseOver)
+      .on("mouseout", handleMouseOut)
+      .on("click", handleClick);
 
   svg
     .append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
+      .attr("class", "x axis")
+      .attr("transform", `translate(0, ${height})`)
+      .call(xAxis);
 
   svg
     .append("g")
-    .attr("class", "y axis")
-    .call(yAxis);
+      .attr("class", "y axis")
+      .call(yAxis);
 
   function handleMouseOver(d, i) {
     if(!clicked) d3.select(this).style("opacity", 1);
@@ -118,10 +127,17 @@ d3.csv("../data/topics.csv").then(data => {
   }
 
   function handleClick(d, i) {
-    clicked = true;
-    svg.selectAll(".topic-line")
-      .style("opacity", 0.2);
-    d3.select(this).style("opacity", 1);
+    if(!clicked) {
+      svg.selectAll(".topic-line")
+        .style("opacity", 0.2);
+      d3.select(this).style("opacity", 1);
+      clicked = true;
+    }
+    else {
+      svg.selectAll(".topic-line")
+        .style("opacity", 0.2);
+      clicked = false;
+    }
     d3.event.stopPropagation();
   }
 

@@ -5,7 +5,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
   entry: {
     main: './src/javascript/index.js',
-    topics: './src/javascript/topics.js'
+    topics: './src/javascript/topics.js',
+    states: './src/javascript/states.js'
   },
 
   output: {
