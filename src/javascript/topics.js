@@ -48,8 +48,8 @@ svg.on("click", () => {
 d3.select('body')
   .on("click", () => {
     if(clicked) {
-      d3.selectAll('.topic-line')
-        .style("opacity", 0.2);
+      d3.selectAll('.topic-line').style("opacity", 0.2);
+      d3.selectAll('.legend-text').style("opacity", 1);
       clicked = false;
     }
   });
@@ -95,7 +95,7 @@ d3.csv("../data/topics.csv").then(data => {
 
   topics
     .append("path")
-      .attr("class", "topic-line")
+      .attr("class", (d, i) => `topic-line topic-line-${i}`)
       .attr("d", d => {
         return line(d.datapoints);
       })
@@ -118,24 +118,73 @@ d3.csv("../data/topics.csv").then(data => {
       .attr("class", "y axis")
       .call(yAxis);
 
+  const legend = d3.select(".topic-modeling")
+    .append("div")
+      .attr("class", "legend-container");
+  
+  legend.selectAll(".legend-text")
+    .data(frequencies)
+    .enter().append("div")
+      .attr("class", (d, i) => `legend-text legend-text-${i}`)
+      .style("color", d => {
+        return color(d.topic);
+      })
+      .text(d => d.topic)
+      .on("mouseover", (d, i) => {
+        if(!clicked) {
+          d3.selectAll('.legend-text').style("opacity", 0.2);
+          d3.select(`.legend-text-${i}`).style("opacity", 1);
+          d3.select(`.topic-line-${i}`).style("opacity", 1);
+        }
+      })
+      .on("mouseout", d => {
+        if(!clicked) {
+          d3.selectAll('.legend-text').style("opacity", 1);
+          d3.selectAll(`.topic-line`).style("opacity", 0.2);
+        }
+      })
+      .on("click", (d, i) => {
+        if(!clicked) {
+          d3.selectAll('.legend-text').style("opacity", 0.2);
+          d3.select(`.legend-text-${i}`).style("opacity", 1);
+          d3.select(`.topic-line-${i}`).style("opacity", 1);
+          clicked = true;
+        }
+        else {
+          d3.selectAll('.legend-text').style("opacity", 1);
+          d3.selectAll(`.topic-line`).style("opacity", 0.2);
+          clicked = false;
+        }
+        d3.event.stopPropagation();
+      });
+
   function handleMouseOver(d, i) {
-    if(!clicked) d3.select(this).style("opacity", 1);
+    if(!clicked) {
+      d3.select(this).style("opacity", 1);
+      d3.selectAll('.legend-text').style("opacity", 0.2);
+      d3.select(`.legend-text-${i}`).style("opacity", 1);
+    }
   }
 
   function handleMouseOut(d, i) {
-    if(!clicked) d3.select(this).style("opacity", 0.2);
+    if(!clicked) {
+      d3.select(this).style("opacity", 0.2);
+      d3.selectAll('.legend-text').style("opacity", 0.2);
+    }
   }
 
   function handleClick(d, i) {
     if(!clicked) {
-      svg.selectAll(".topic-line")
-        .style("opacity", 0.2);
+      d3.selectAll(".topic-line").style("opacity", 0.2);
       d3.select(this).style("opacity", 1);
+      d3.selectAll('.legend-text').style("opacity", 0.2);
+      d3.select(`.legend-text-${i}`).style("opacity", 1);
       clicked = true;
     }
     else {
-      svg.selectAll(".topic-line")
-        .style("opacity", 0.2);
+      d3.selectAll(".topic-line").style("opacity", 0.2);
+      d3.select(`.legend-text-${i}`).style("opacity", 1);
+      d3.selectAll('.legend-text').style("opacity", 1);
       clicked = false;
     }
     d3.event.stopPropagation();

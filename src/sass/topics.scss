@@ -14,3 +14,12 @@
 #topic-line-chart {
   width: 100%;
 }
+
+.legend-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  .legend-text {
+    margin: 10px;
+  }
+}

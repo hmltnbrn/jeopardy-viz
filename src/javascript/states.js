@@ -84,7 +84,7 @@ function createMap([us]) {
     .selectAll("path")
     .data(topojson.feature(us, us.objects.states).features)
     .enter().append("path")
-      .attr("fill", d => { 
+      .attr("fill", d => {
         let sn = stateNames.get(+d.id);
         d.percentage = map.get(sn)["percentage"] || 0;
         d.proportion = map.get(sn)["proportion"] || 0;
@@ -96,22 +96,55 @@ function createMap([us]) {
         }
       })
       .attr("d", path)
-      .on("mouseover", d => {
-        toolDiv.transition()
-          .duration(200)
-          .style("opacity", .9);
-        toolDiv.html(`<h2>${stateNames.get(+d.id)}</h2>1 contestant per ${Math.round(d.proportion).toLocaleString()} people`)
-          .style("left", (d3.event.pageX) + "px")
-          .style("top", (d3.event.pageY - 28) + "px");
-      })
-      .on("mouseout", d => {
-        toolDiv.transition()
-          .duration(500)
-          .style("opacity", 0);
-      });
+      .on("mouseover", handleMouseOver)
+      .on("mouseout", handleMouseOut);
 
   svg.append("path")
     .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
     .attr("class", "states")
     .attr("d", path);
+  
+  var dc = svg.append("g")
+    .attr("transform", `translate(${width - 40}, ${height - 150})`)
+    .attr("class", "dc-group");
+  
+  dc.append("text")
+    .attr("class","aca-dc-text")
+    .attr("x", 24)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .text("DC");
+  
+  d3.select(".dc-group").selectAll("rect")
+    .data([map.get("District of Columbia")])
+    .enter()
+      .append("rect")
+      .attr("class", "aca-dc")
+      .attr("width", 18)
+      .attr("height", 18)
+      .attr("fill", d => {
+        let col = color(d.percentage); 
+        if (col) {
+          return col;
+        } else {
+          return '#ffffff';
+        }
+      })
+      .on("mouseover", handleMouseOver)
+      .on("mouseout", handleMouseOut);
+  
+  function handleMouseOver(d) {
+    toolDiv.transition()
+      .duration(200)
+      .style("opacity", .9);
+    toolDiv.html(`<h2>${stateNames.get(+d.id) || "District of Columbia"}</h2>1 contestant per ${Math.round(d.proportion).toLocaleString()} people`)
+      .style("left", (d3.event.pageX) + "px")
+      .style("top", (d3.event.pageY - 28) + "px");
+  }
+
+  function handleMouseOut() {
+    toolDiv.transition()
+      .duration(500)
+      .style("opacity", 0);
+  }
 }
