@@ -169,7 +169,7 @@ d3.csv("../data/topics.csv").then(data => {
   function handleMouseOut(d, i) {
     if(!clicked) {
       d3.select(this).style("opacity", 0.2);
-      d3.selectAll('.legend-text').style("opacity", 0.2);
+      d3.selectAll('.legend-text').style("opacity", 1);
     }
   }
 

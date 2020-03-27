@@ -6,8 +6,8 @@ import '../sass/states.scss';
 
 const toolDiv = d3.select("body")
   .append("div")
-  .attr("class", "state-tooltip")
-  .style("opacity", 0);
+    .attr("class", "state-tooltip")
+    .style("opacity", 0);
 
 const margin = { top: 10, right: 20, bottom: 30, left: 30 };
 
@@ -72,7 +72,7 @@ const promises = [
     stateNames.set(d.id, d.name);
   }),
   d3.csv("../data/us-state-proportions.csv", function(d) { 
-    map.set(d.name, { proportion: +d.proportion, percentage: +d.percentage }); 
+    map.set(d.name, { proportion: +d.proportion, percentage: +d.percentage, population: d.population, contestants: d.contestants }); 
   })
 ]
 
@@ -88,6 +88,8 @@ function createMap([us]) {
         let sn = stateNames.get(+d.id);
         d.percentage = map.get(sn)["percentage"] || 0;
         d.proportion = map.get(sn)["proportion"] || 0;
+        d.population = map.get(sn)["population"] || 0;
+        d.contestants = map.get(sn)["contestants"] || 0;
         let col = color(d.percentage); 
         if (col) {
           return col;
@@ -137,7 +139,15 @@ function createMap([us]) {
     toolDiv.transition()
       .duration(200)
       .style("opacity", .9);
-    toolDiv.html(`<h2>${stateNames.get(+d.id) || "District of Columbia"}</h2>1 contestant per ${Math.round(d.proportion).toLocaleString()} people`)
+    toolDiv.html(`
+      <h2>${stateNames.get(+d.id) || "District of Columbia"}</h2>
+      <h3>2019 Population</h3>
+      <p>${d.population}</p>
+      <h3>Contestants</h3>
+      <p>${d.contestants}</p>
+      <h3>Proportion</h3>
+      <p>1 contestant / ${Math.round(d.proportion).toLocaleString()} people</p>
+    `)
       .style("left", (d3.event.pageX) + "px")
       .style("top", (d3.event.pageY - 28) + "px");
   }

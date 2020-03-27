@@ -1,0 +1,35 @@
+path.slice {
+	stroke-width:2px;
+}
+
+polyline {
+	opacity: .3;
+	stroke: black;
+	stroke-width: 2px;
+	fill: none;
+}
+
+#gender-charts {
+  width: 100%;
+  display: flex;
+  & > div {
+    width: 50%;
+  }
+  h3 {
+    text-align: center;
+  }
+}
+
+div.gender-tooltip {	
+  position: absolute;
+  padding: 20px;
+  font-size: 12px;
+  background: #000000;
+  color: #ffffff;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  p {
+    margin-top: 5px;
+  }
+}

@@ -6,7 +6,8 @@ module.exports = {
   entry: {
     main: './src/javascript/index.js',
     topics: './src/javascript/topics.js',
-    states: './src/javascript/states.js'
+    states: './src/javascript/states.js',
+    gender: './src/javascript/gender.js'
   },
 
   output: {
