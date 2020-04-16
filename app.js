@@ -13,6 +13,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.get('/about', function(req, res, next) {
+  res.sendFile(path.join(__dirname, 'dist', 'about.html'));
+});
+
+app.get('/methods', function(req, res, next) {
+  res.sendFile(path.join(__dirname, 'dist', 'methods.html'));
+});
+
 app.get('/*', function(req, res, next) {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });

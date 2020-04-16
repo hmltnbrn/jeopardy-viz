@@ -102,7 +102,21 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({
       template: './src/index.html',
-      filename: './index.html'
+      filename: './index.html',
+      inject: true,
+      chunks: ['main', 'topics', 'states', 'gender']
+    }),
+    new HtmlWebPackPlugin({
+      template: './src/about.html',
+      filename: './about.html',
+      inject: true,
+      chunks: ['main']
+    }),
+    new HtmlWebPackPlugin({
+      template: './src/methods.html',
+      filename: './methods.html',
+      inject: true,
+      chunks: ['main']
     })
   ],
 

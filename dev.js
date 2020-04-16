@@ -7,7 +7,13 @@ const options = {
   hot: true,
   host: 'localhost',
   inline: true,
-  watchContentBase: true
+  watchContentBase: true,
+  historyApiFallback: {
+    rewrites: [
+      { from: /^\/about/, to: '/about.html' },
+      { from: /^\/methods/, to: '/methods.html' }
+    ],
+  }
 };
 
 webpackDevServer.addDevServerEntrypoints(config, options);

@@ -12,6 +12,11 @@
     <div>
       <h1>A Data Exploration of Jeopardy! from 1984 to the Present</h1>
       <h3>Brian Hamilton</h3>
+      <nav>
+        <a href="/">Visualizations</a>
+        <a href="/about">About</a>
+        <a href="/methods">Methods</a>
+      </nav>
     </div>
   </header>
   <main>
@@ -21,11 +26,13 @@
         <div id="topic-line-chart"></div>
       </section>
       <section>
-        <h2>State Proportions</h2>
+        <h2>State-by-State Contestants</h2>
+        <p>While looking at the data I collected from the archive, I noticed that most contestants were identified by their name, hometown, and profession. I stripped out their local town and isolated each one that was from the fifty U.S. states and the District of Columbia. From here, I took a count of how many came from each state, making sure to only count each contestant once.</p>
+        <p>After I had this list, I compared it to <a href="https://www.census.gov/newsroom/press-kits/2019/national-state-estimates.html" target="_blank">population estimates made by the U.S. Census Bureau for 2019</a>, creating a proportion of number of contestants to the total population. Below, I created a map of the United States and the District of Columbia, shading each state by the size of the proportion; the darker shade, the larger the proportion, and vice versa. Hover over each state to see more detailed information.</p>
         <div id="state-chart"></div>
       </section>
       <section>
-        <h2>Gender Breakdown</h2>
+        <h2>Gender in <em>Jeopardy!</em></h2>
         <div id="gender-charts">
           <div id="gender-by-series">
             <h3>Gender By Series</h3>

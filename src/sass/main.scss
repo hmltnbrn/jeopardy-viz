@@ -22,6 +22,13 @@ p {
   margin: 0;
 }
 
+a:link,
+a:visited,
+a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+
 header {
   width: 100%;
   min-height: 200px;
@@ -41,6 +48,13 @@ header {
   h3 {
     opacity: 0.4;
   }
+  nav {
+    display: flex;
+    margin-top: 10px;
+    a {
+      margin-right: 15px;
+    }
+  }
 }
 
 main {
@@ -53,7 +67,13 @@ main {
   section {
     margin-bottom: 50px;
     h2 {
-      margin-bottom: 10px;
+      margin-bottom: 25px;
+    }
+    p {
+      margin-bottom: 20px;
+    }
+    p:last-of-type {
+      margin-bottom: 50px;
     }
   }
 }
