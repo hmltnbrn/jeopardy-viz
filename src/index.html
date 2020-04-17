@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeopardy Exploration | Brian Hamilton</title>
+  <title>Jeopardy Exploration | Visualizations</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
@@ -21,8 +21,13 @@
   </header>
   <main>
     <div>
+      <section>
+        <h2>Introduction</h2>
+        <p>This project is an analysis of a dataset I created by scraping the HTML from the crowdsourced <em>Jeopardy!</em> archive <a href="http://j-archive.com/" target="_blank">J! Archive</a>. Read more about the impetus to this project on the <a href="/about">About</a> page and the methods I took for building the dataset, analyzing it, and visualizing it on the <a href="/methods">Methods</a> page.</p>
+      </section>
       <section class="topic-modeling">
         <h2>Topic Modeling</h2>
+        <p>Using MALLET, I built a topic model for the clues on J! Archive. Below is a visual representation of the change in topic usage over the course of the show's run. Hover over the line on the graph or the topic key in the legend to isolate each individual topic for viewing. My hope from this is to see trends in topic usage. For example, I noticed that "History/War" spikes to its highest usage during the Gulf War.</p>
         <div id="topic-line-chart"></div>
       </section>
       <section>

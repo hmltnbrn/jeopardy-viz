@@ -72,8 +72,31 @@ main {
     p {
       margin-bottom: 20px;
     }
-    p:last-of-type {
-      margin-bottom: 50px;
-    }
+  }
+}
+
+.code {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #f6f8fa;
+  margin-bottom: 20px;
+}
+
+img {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  tr {
+    border: 1px solid black;
+  }
+  td {
+    padding: 5px;
+    border-spacing: 0px;
+    vertical-align: baseline;
   }
 }

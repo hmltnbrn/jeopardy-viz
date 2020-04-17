@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeopardy Exploration | Brian Hamilton</title>
+  <title>Jeopardy Exploration | Methods</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
@@ -23,9 +23,148 @@
     <div>
       <section>
         <h2>Collecting the Data</h2>
+        <p>In order to build the database, I used <a href="https://www.python.org/downloads/" target="_blank">Python 3</a> and <a href="https://pypi.org/project/beautifulsoup4/" target="_blank">BeautifulSoup</a> to scrape <a href="http://j-archive.com/" target="_blank">J! Archive</a> of the revelant data. The full GitHub repository for this is <a href="https://github.com/hmltnbrn/jeopardy-scrape" target="_blank">here</a> and the scraping scripts are <a href="https://github.com/hmltnbrn/jeopardy-scrape/tree/master/scrape" target="_blank">here</a>. If you clone the repository, you can learn how to run the script yourself by running the commands below.</p>
+        <div class="code">
+          <code>cd scrape</code>
+          <code>python scrape.py --help</code>
+        </div>
+        <p>Before running the script above, you will need to have set up your own database. The database itself is relational, allowing for the different tables to be connected through foreign keys. You can create your own database by installing <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a> and running the SQL code in <a href="https://github.com/hmltnbrn/jeopardy-scrape/tree/master/database" target="_blank">database/create.sql</a> once you have created a database. Below is an entiy-relationship diagram that details the columns and illustrates the connection between the tables.</p>
+        <img src="./images/er-diagram.png"/>
+        <p>I used the information on each contestant to classify them by a male/female gender. While reductive, it would help in doing further analysis of the data. Run the commands below to send the first name for each contestant to Genderize.io, a third-party API for identifying gender by name, and update the database accordingly.</p>
+        <div class="code">
+          <code>cd addon</code>
+          <code>python gender.py</code>
+        </div>
       </section>
       <section>
         <h2>Topic Modeling</h2>
+        <p>With the data in the database, I went about using <a href="http://mallet.cs.umass.edu/" target="_blank">MALLET</a> to create a topic model for the clues. This will return a set of topics (the number of which you choose--I went with 25) categorizing each input text. I created a series of Pythons scripts for this, keeping them in the <a href="https://github.com/hmltnbrn/jeopardy-scrape/tree/master/topics" target="_blank">topics</a> directory of the project. Run the command below to create a separate text file for each clue in the database from the first specified season to the last.</p>
+        <div class="code">
+          <code>cd topics</code>
+          <code>python create_clues_data.py -s 1 35</code>
+        </div>
+        <p>Move to the MALLET directory and import these files (specifically, point to the directory they are kept in).</p>
+        <div class="code">
+          <code>bin\mallet import-dir --input {wherever the project lives}\jeopardy-scrape\topics\mallet_files\data\clues --output jeopardy_clues.mallet --keep-sequence --remove-stopwords</code>
+        </div>
+        <p>Train the model and create the output files.</p>
+        <div class="code">
+          <code>bin\mallet train-topics  --input jeopardy_prof.mallet --num-topics 25 --optimize-interval 20 --output-state jeopardy_prof_topic-state.gz --output-topic-keys jeopardy_prof_keys.txt --output-doc-topics jeopardy_prof_composition.txt</code>
+        </div>
+        <p>Move <strong>jeopardy_prof_keys.txt</strong> and <strong>jeopardy_prof_composition.txt</strong> to <strong>topics/mallet_files/output/clues</strong>. These files contain the topic information and which topics each clue is part of. Run the two commands below to update the database with that data.</p>
+        <div class="code">
+          <code>cd topics</code>
+          <code>python parse_clue_topic_keys.py</code>
+          <code>python parse_clue_topic_composition.py</code>
+        </div>
+        <p>Each run of the topic modeling will create slightly different outputs. It took trial and error for me to decide on using 25 topics. The table below shows the output for the model and the short titles I came up with.</p>
+        <table>
+          <tr>
+            <th>Full Text</th>
+            <th>Short Text</th>
+          </tr>
+          <tr>
+            <td>ancient god bible greek religion biblical b.c roman book king mythology man jesus testament people day history called son religious</td>
+            <td>Religion</td>
+          </tr>
+          <tr>
+            <td>science it's element type water gas light weather metal physics called energy elements earth air chemistry measures rock made measure</td>
+            <td>Science</td>
+          </tr>
+          <tr>
+            <td>art artists fashion artist painting french century style painted work made named famous hat museum wear worn paintings called painter</td>
+            <td>Art</td>
+          </tr>
+          <tr>
+            <td>city museum york building san street world london capital house city's home park built hotel bridge it's tower museums famous</td>
+            <td>Geography/Local</td>
+          </tr>
+          <tr>
+            <td>country world island capital south sea city islands river geography it's countries largest africa north nation country's water african miles</td>
+            <td>Geography/World</td>
+          </tr>
+          <tr>
+            <td>state city u.s river states national lake capital named park cities south north it's west california american state's texas county</td>
+            <td>Geography/U.S.</td>
+          </tr>
+          <tr>
+            <td>book wrote author authors literature title books literary american story john lit novels man poetry poet published century character poem</td>
+            <td>Literature</td>
+          </tr>
+          <tr>
+            <td>show series played sitcom family married television star actress title woman women famous shows celebrity character host i'm film comic</td>
+            <td>Television</td>
+          </tr>
+          <tr>
+            <td>school university college prize colleges nobel magazine founded york times universities newspaper named won news magazines awards high newspapers american</td>
+            <td>Academics</td>
+          </tr>
+          <tr>
+            <td>u.s law government money court it's act organization department american history group united rights crime legal states type bill amendment</td>
+            <td>Law</td>
+          </tr>
+          <tr>
+            <td>company business car brand industry stock introduced million store made u.s cars company's sold ford model founded it's product names</td>
+            <td>Business</td>
+          </tr>
+          <tr>
+            <td>clue crew sarah jimmy reports space shows kelly monitor it's presents moon delivers earth planet cheryl star math science sun</td>
+            <td>Random/Clue Crew</td>
+          </tr>
+          <tr>
+            <td>body medicine blood it's disease human medical part health heart called type brain organ science anatomy eye bones bone doctor</td>
+            <td>Human Body</td>
+          </tr>
+          <tr>
+            <td>animal animals bird dog birds fish it's type species called dogs cat sea named bear mammals breed feet creature wild</td>
+            <td>Animals</td>
+          </tr>
+          <tr>
+            <td>song music hit songs rock musical band pop love singer album top title group country dance heard it's sang instrument</td>
+            <td>Music/General</td>
+          </tr>
+          <tr>
+            <td>film movie movies played title oscar films star actor man role won actors john character classic series big roles screen</td>
+            <td>Film</td>
+          </tr>
+          <tr>
+            <td>opera play shakespeare music ballet title classical wrote composer composers musical characters plays theatre character shakespearean tale based literary dance</td>
+            <td>Music/Classical</td>
+          </tr>
+          <tr>
+            <td>king history country world queen century british leader years minister great prime prince empire born man france president england french</td>
+            <td>History/General</td>
+          </tr>
+          <tr>
+            <td>food it's made cheese dish french cooking type eat cream drink meat make soup bread candy sauce chocolate chicken called</td>
+            <td>Food & Drink</td>
+          </tr>
+          <tr>
+            <td>president u.s presidential john day state house presidents man george american secretary senator vice history lincoln governor party washington chief</td>
+            <td>U.S. Politics</td>
+          </tr>
+          <tr>
+            <td>war u.s battle american history civil world military army general british ship captain john century air navy revolution historic ships</td>
+            <td>History/War</td>
+          </tr>
+          <tr>
+            <td>word words letter it's means meaning term latin clues crossword phrase phrases french you're greek adjective letters person time origins</td>
+            <td>Words</td>
+          </tr>
+          <tr>
+            <td>sports team baseball football won sport olympic world game league games hall record bowl home olympics nfl fame player college</td>
+            <td>Sports</td>
+          </tr>
+          <tr>
+            <td>it's game type words time games called letter term ball you're play word board feet back piece hand make horse</td>
+            <td>Random/Games</td>
+          </tr>
+          <tr>
+            <td>color tree red it's fruit plant drink wine white flower green type flowers blue trees beer colors made potent plants</td>
+            <td>Random/Colors</td>
+          </tr>
+        </table>
+        <p>I created the database tables and scripts for doing a topic model for the professions of each contestant, but as of right now, I could not find the right number of topics to use. It seemed that the runs through the algorithm either created too many duplicates or missed important ones--as in, there was too much variation between the runs. I am going to continue with this after the completion of the project.</p>
       </section>
       <section>
         <h2>Visualizing the Data</h2>
