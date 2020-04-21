@@ -27,7 +27,8 @@
       </section>
       <section class="topic-modeling">
         <h2>Topic Modeling</h2>
-        <p>Using MALLET, I built a topic model for the clues on J! Archive. Below is a visual representation of the change in topic usage over the course of the show's run. Hover over the line on the graph or the topic key in the legend to isolate each individual topic for viewing. My hope from this is to see trends in topic usage. For example, I noticed that "History/War" spikes to its highest usage during the Gulf War.</p>
+        <p>Using MALLET, I built a topic model for the clues on J! Archive. Below is a visual representation of the change in topic usage over the course of the show's run. My hope from this is to see trends in topic usage. For example, I noticed that "History/War" spikes to its highest usage during the Gulf War.</p>
+        <p>Hover over the line on the graph or the topic key in the legend to isolate each individual topic for viewing. You can also click on the line or legend text to hold it in place.</p>
         <div id="topic-line-chart"></div>
       </section>
       <section>
@@ -38,12 +39,31 @@
       </section>
       <section>
         <h2>Gender in <em>Jeopardy!</em></h2>
-        <div id="gender-charts">
-          <div id="gender-by-series">
-            <h3>Gender By Series</h3>
+        <p>Past studies of gender in <em>Jeopardy!</em> has taken a few different forms over the years. They have either looked at the different kinds of topics men and women may have chosen to respond to or how they act during the game. While J! Archive does not include a reference to a contestant's gender in their description, I was able to use the third-party API <a href="https://genderize.io/" target="_blank">Genderize.io</a> to determine the most likely gender from their first name.</p>
+        <div class="gender-number-charts">
+          <div class="gender-by-charts">
+            <div class="gender-blurb">
+              <h3>Gender By Series</h3>
+              <p>Before looking at more in depth analysis of gender in <em>Jeopardy!</em>, it's important to know how many men and women have actually been on the show. I grouped together contestants by their gender (removing any that Genderize.io was not able to determine) and took a count of each. Below is a donut chart of those numbers, indicating that 42.5% of contestants are women and 57.5% are men. These numbers line up almost exactly with studies that used a small number of episodes to conduct their research.</p>
+            </div>
+            <div id="gender-by-series-chart"></div>
           </div>
-          <div id="gender-by-episode">
-            <h3>Gender By Episode</h3>
+          <div class="gender-by-charts">
+            <div class="gender-blurb">
+              <h3>Gender By Episode</h3>
+              <p>During an actual episode of <em>Jeopardy!</em>, there are three contestants competing against each other. One of them is the winner from the previous episode (if there was one) and the other two are new contestants. I was able to determine the breakdown of those three contestants by gender, only including episodes where all three contestants had a known gender. A makeup of two men and one woman takes up the majority of episodes, with all three being women happening the least. Below is a donut chart showing the breakdown.</p>
+            </div>
+            <div id="gender-by-episode-chart"></div>
+          </div>
+        </div>
+        <div class="gender-win-charts">
+          <div class="gender-by-charts">
+            <div class="gender-blurb">
+              <h3>Who Wins?</h3>
+              <p>By the end of an episode, the contestant with the most money is declared the winner. They are allowed to come back to the next game and defend their win. Some are good enough to win multiple games and continue on and on until they lose. I grouped together the data in a way that shows the gender disparity in number of wins. The vast majority of contestants have only one win and I wanted to show this versus those who win more than once.</p>
+              <p>To the right is a stacked bar chart for the breakdown of wins. Hover over the bars to get more detailed numbers.</p>
+            </div>
+            <div id="gender-by-wins"></div>
           </div>
         </div>
       </section>

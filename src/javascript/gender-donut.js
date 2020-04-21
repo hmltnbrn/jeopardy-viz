@@ -23,14 +23,14 @@ const promises = [
 Promise.all(promises).then(renderEverything);
 
 function renderEverything(results) {
-  createCharts("series", "#gender-by-series", results[0][0]);
-  createCharts("episode", "#gender-by-episode", results[1][0]);
+  createCharts("series", "#gender-by-series-chart", results[0][0]);
+  createCharts("episode", "#gender-by-episode-chart", results[1][0]);
 }
 
 function createCharts(type, chartDiv, data) {
-  const width = 450,
-        height = 450,
-        margin = 40;
+  const width = 250,
+        height = 250,
+        margin = 0;
 
   const radius = Math.min(width, height) / 2 - margin;
 

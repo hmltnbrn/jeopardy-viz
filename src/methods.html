@@ -30,7 +30,7 @@
         </div>
         <p>Before running the script above, you will need to have set up your own database. The database itself is relational, allowing for the different tables to be connected through foreign keys. You can create your own database by installing <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a> and running the SQL code in <a href="https://github.com/hmltnbrn/jeopardy-scrape/tree/master/database" target="_blank">database/create.sql</a> once you have created a database. Below is an entiy-relationship diagram that details the columns and illustrates the connection between the tables.</p>
         <img src="./images/er-diagram.png"/>
-        <p>I used the information on each contestant to classify them by a male/female gender. While reductive, it would help in doing further analysis of the data. Run the commands below to send the first name for each contestant to Genderize.io, a third-party API for identifying gender by name, and update the database accordingly.</p>
+        <p>I used the information on each contestant to classify them by a male/female gender. While reductive, it would help in doing further analysis of the data. Run the commands below to send the first name for each contestant to <a href="https://genderize.io/" target="_blank">Genderize.io</a>, a third-party API for identifying gender by name, and update the database accordingly.</p>
         <div class="code">
           <code>cd addon</code>
           <code>python gender.py</code>
@@ -164,7 +164,7 @@
             <td>Random/Colors</td>
           </tr>
         </table>
-        <p>I created the database tables and scripts for doing a topic model for the professions of each contestant, but as of right now, I could not find the right number of topics to use. It seemed that the runs through the algorithm either created too many duplicates or missed important ones--as in, there was too much variation between the runs. I am going to continue with this after the completion of the project.</p>
+        <p>I created the database tables and scripts for doing a topic model for the professions of each contestant, but as of right now, I could not find the right number of topics to use. It seemed that the run through of the algorithm either created too many duplicates or missed important ones--as in, there was too much variation between the runs. I am going to continue with this after the completion of the project.</p>
       </section>
       <section>
         <h2>Visualizing the Data</h2>
