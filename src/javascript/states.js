@@ -106,7 +106,7 @@ function createMap([us]) {
     .attr("class", "states")
     .attr("d", path);
   
-  var dc = svg.append("g")
+  const dc = svg.append("g")
     .attr("transform", `translate(${width - 40}, ${height - 150})`)
     .attr("class", "dc-group");
   

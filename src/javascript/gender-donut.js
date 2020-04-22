@@ -3,11 +3,6 @@ import { responsive } from './helper';
 
 import '../sass/gender.scss';
 
-const toolDiv = d3.select("body")
-  .append("div")
-    .attr("class", "gender-tooltip")
-    .style("opacity", 0);
-
 const episodeKey = {
   "3w-0m": "3 women/0 men",
   "2w-1m": "2 women/1 man",
@@ -23,8 +18,8 @@ const promises = [
 Promise.all(promises).then(renderEverything);
 
 function renderEverything(results) {
-  createCharts("series", "#gender-by-series-chart", results[0][0]);
-  createCharts("episode", "#gender-by-episode-chart", results[1][0]);
+  createCharts("series", "gender-by-series-chart", results[0][0]);
+  createCharts("episode", "gender-by-episode-chart", results[1][0]);
 }
 
 function createCharts(type, chartDiv, data) {
@@ -34,7 +29,7 @@ function createCharts(type, chartDiv, data) {
 
   const radius = Math.min(width, height) / 2 - margin;
 
-  const svg = d3.select(chartDiv)
+  const svg = d3.select(`#${chartDiv}`)
     .append("svg")
       .attr("width", width)
       .attr("height", height)
@@ -42,13 +37,11 @@ function createCharts(type, chartDiv, data) {
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-  const color = d3.scaleOrdinal()
-    .domain(d3.keys(data))
-    .range(d3.schemeDark2);
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
 
   const pie = d3.pie()
     .sort(null)
-    .value(function(d) {return d.value; });
+    .value(d => d.value);
 
   const data_ready = pie(d3.entries(data));
 
@@ -59,48 +52,83 @@ function createCharts(type, chartDiv, data) {
   const outerArc = d3.arc()
     .innerRadius(radius * 0.9)
     .outerRadius(radius * 0.9);
+  
+  let total = data_ready.reduce((acc, val) => acc + +val.data.value, 0);
+  data_ready.forEach(val => {
+    val.data.perc = (+val.data.value/total*100).toFixed(1);
+  });
 
   svg
     .selectAll('allSlices')
     .data(data_ready)
     .enter()
+    .append("g")
+      .attr('class', (d, i) => `${chartDiv}-${i}`)
+      .on("mouseover", handleMouseOver)
+      .on("mouseout", handleMouseOut)
     .append('path')
-    .attr('d', arc)
-    .attr('fill', function(d){ return(color(d.data.key)) })
-    .attr("stroke", "white")
-    .style("stroke-width", "2px")
-    .style("opacity", 0.7);
-    // .on("mouseover", handleMouseOver)
-    // .on("mouseout", handleMouseOut);
+      .attr('d', arc)
+      .attr('fill', (d, i) => color(i))
+      .attr("stroke", "white")
+      .style("stroke-width", "2px")
+      .style("opacity", 0.7);
 
-  const legend = d3.select(chartDiv)
+  const legend = d3.select(`#${chartDiv}`)
     .append("div")
       .attr("class", "legend-container");
   
   legend.selectAll(".legend-text")
     .data(data_ready)
     .enter().append("div")
-      .attr("class", (d, i) => `legend-text legend-text-${i}`)
-      .style("color", d => {
-        return color(d.data.key);
+      .attr("class", (d, i) => `legend-text ${chartDiv}-legend-text ${chartDiv}-legend-text-${i}`)
+      .style("color", (d, i) => {
+        return color(i);
       })
       .text(d => {
-        return `${type === "episode" ? episodeKey[d.data.key] : d.data.key} (${d.data.value})`;
-      });
+        return `${type === "episode" ? episodeKey[d.data.key] : d.data.key}`;
+      })
+      .on("mouseover", handleMouseOver)
+      .on("mouseout", handleMouseOut);
   
-  function handleMouseOver(d) {
-    toolDiv.transition()
-      .duration(200)
-      .style("opacity", .9);
-    toolDiv.html(`<h2>${type === "episode" ? episodeKey[d.data.key] : d.data.key}</h2><p>${d.data.value} ${type === "episode" ? "occurences" : ""}</p>`)
-      .style("left", (d3.event.pageX) + "px")
-      .style("top", (d3.event.pageY - 28) + "px");
+  function handleMouseOver(d, i) {
+    let g = d3.select(`.${chartDiv}-${i}`)
+      .style("cursor", "pointer")
+      .style("fill", "black")
+      .append("g")
+        .attr("class", "text-group");
+  
+    g.append("text")
+      .attr("class", "name-text")
+      .text(`${d.data.key}`)
+      .attr('text-anchor', 'middle')
+      .attr('dy', '-1.2em')
+      .style("fill", d => color(i));
+
+    g.append("text")
+      .attr("class", "value-text")
+      .text(`${d.data.value} (${d.data.perc}%)`)
+      .attr('text-anchor', 'middle')
+      .attr('dy', '.6em')
+      .style("fill", d => color(i));
+
+    d3.selectAll(`.${chartDiv}-legend-text`).style("opacity", 0.2);
+    d3.select(`.${chartDiv}-legend-text-${i}`).style("opacity", 1);
+
+    d3.select(`.${chartDiv}-${i}`).select('path')
+      .style("cursor", "pointer")
+      .style("fill", "black");
   }
 
-  function handleMouseOut() {
-    toolDiv.transition()
-      .duration(500)
-      .style("opacity", 0);
+  function handleMouseOut(d, i) {
+    d3.select(`.${chartDiv}-${i}`)
+      .style("cursor", "none")  
+      .style("fill", color(i))
+      .select(".text-group").remove();
+
+    d3.selectAll(`.${chartDiv}-legend-text`).style("opacity", 1);
+    d3.select(`.${chartDiv}-${i}`).select('path')
+      .style("cursor", "none")
+      .style("fill", color(i));
   }
 
 }

@@ -11,6 +11,10 @@ html {
 body {
   margin: 0;
   line-height: normal;
+  background-color: #fafafa;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 h1, h2, h3, h4, h5 {
@@ -59,6 +63,7 @@ header {
 
 main {
   width: 100%;
+  flex: 1;
   & > div {
     margin: 0 auto;
     max-width: 1280px;
@@ -106,6 +111,25 @@ table {
     td:first-of-type,
     th:first-of-type {
       border-right: 1px solid black;
+    }
+  }
+}
+
+footer {
+  width: 100%;
+  padding: 50px 16px;
+  text-align: center;
+  background-color: #ffffff;
+  p {
+    color: #4f4f4f;
+    font-size: 25px;
+    margin-bottom: 15px;
+  }
+  nav {
+    display: flex;
+    justify-content: center;
+    a {
+      margin: 0 15px;
     }
   }
 }

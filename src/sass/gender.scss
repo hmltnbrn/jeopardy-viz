@@ -1,5 +1,5 @@
 path.slice {
-	stroke-width:2px;
+	stroke-width: 2px;
 }
 
 polyline {
@@ -12,6 +12,7 @@ polyline {
 .gender-number-charts {
   width: 100%;
   display: flex;
+  margin-bottom: 50px;
   .gender-by-charts {
     display: flex;
     flex-direction: column;
@@ -51,4 +52,22 @@ div.gender-tooltip {
 .x-axis,
 .y-axis {
   font-size: 15px;
+}
+
+@media (max-width: 765px) {
+  .gender-number-charts {
+    flex-direction: column;
+    .gender-by-charts {
+      width: 100%;
+      padding-right: 0;
+    }
+  }
+  .gender-win-charts {
+    .gender-by-charts {
+      flex-direction: column;
+      & > div {
+        width: 100%;
+      }
+    }
+  }
 }

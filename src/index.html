@@ -44,7 +44,8 @@
           <div class="gender-by-charts">
             <div class="gender-blurb">
               <h3>Gender By Series</h3>
-              <p>Before looking at more in depth analysis of gender in <em>Jeopardy!</em>, it's important to know how many men and women have actually been on the show. I grouped together contestants by their gender (removing any that Genderize.io was not able to determine) and took a count of each. Below is a donut chart of those numbers, indicating that 42.5% of contestants are women and 57.5% are men. These numbers line up almost exactly with studies that used a small number of episodes to conduct their research.</p>
+              <p>Before looking at more in depth analysis of gender in <em>Jeopardy!</em>, it's important to know how many men and women have actually been on the show. I grouped together contestants by their gender (removing any contestants that Genderize.io was not able to determine) and took a count of each. I created a donut char for those numbers, showing that 42.5% of contestants are women and 57.5% are men. These numbers line up almost exactly with studies that used a small number of episodes to conduct their research.</p>
+              <p>Hover over the slices or the legend to get a more detailed view of the numbers.</p>
             </div>
             <div id="gender-by-series-chart"></div>
           </div>
@@ -52,6 +53,7 @@
             <div class="gender-blurb">
               <h3>Gender By Episode</h3>
               <p>During an actual episode of <em>Jeopardy!</em>, there are three contestants competing against each other. One of them is the winner from the previous episode (if there was one) and the other two are new contestants. I was able to determine the breakdown of those three contestants by gender, only including episodes where all three contestants had a known gender. A makeup of two men and one woman takes up the majority of episodes, with all three being women happening the least. Below is a donut chart showing the breakdown.</p>
+              <p>Hover over the slices or the legend to get a more detailed view of the numbers.</p>
             </div>
             <div id="gender-by-episode-chart"></div>
           </div>
@@ -61,7 +63,7 @@
             <div class="gender-blurb">
               <h3>Who Wins?</h3>
               <p>By the end of an episode, the contestant with the most money is declared the winner. They are allowed to come back to the next game and defend their win. Some are good enough to win multiple games and continue on and on until they lose. I grouped together the data in a way that shows the gender disparity in number of wins. The vast majority of contestants have only one win and I wanted to show this versus those who win more than once.</p>
-              <p>To the right is a stacked bar chart for the breakdown of wins. Hover over the bars to get more detailed numbers.</p>
+              <p>I created a stacked bar chart to show the breakdown of wins. Hover over the bars to get more detailed numbers.</p>
             </div>
             <div id="gender-by-wins"></div>
           </div>
@@ -69,6 +71,13 @@
       </section>
     </div>
   </main>
-  <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+  <footer>
+    <p>Brian Hamilton</p>
+    <nav>
+      <a href="/">Visualizations</a>
+      <a href="/about">About</a>
+      <a href="/methods">Methods</a>
+    </nav>
+  </footer>
 </body>
 </html>
