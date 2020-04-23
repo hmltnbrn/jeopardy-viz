@@ -33,7 +33,7 @@ d3.csv("../data/gender-by-wins.csv").then(data => {
     .attr("class", "y-axis")
 
   const color = d3.scaleOrdinal()
-    .range(["steelblue", "darkorange"])
+    .range(d3.schemeCategory10)
     .domain(keys);
 
   data.forEach(d => {
@@ -108,7 +108,7 @@ d3.csv("../data/gender-by-wins.csv").then(data => {
     d3.selectAll('.desc-text').style("opacity", 0.2);
     d3.select(`.${d.data.Gender}-text`)
       .style("opacity", 1)
-      .text(mouseTotal.toLocaleString());
+      .text(`${mouseTotal.toLocaleString()} (${(mouseTotal/d.data.total*100).toFixed(1)}%)`);
   }
 
   function handleMouseOut(d) {

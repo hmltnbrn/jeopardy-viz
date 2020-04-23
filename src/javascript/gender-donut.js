@@ -63,7 +63,7 @@ function createCharts(type, chartDiv, data) {
     .data(data_ready)
     .enter()
     .append("g")
-      .attr('class', (d, i) => `${chartDiv}-${i}`)
+      .attr('class', (d, i) => `${chartDiv}-pie-slice ${chartDiv}-${i}`)
       .on("mouseover", handleMouseOver)
       .on("mouseout", handleMouseOut)
     .append('path')
@@ -92,7 +92,6 @@ function createCharts(type, chartDiv, data) {
   
   function handleMouseOver(d, i) {
     let g = d3.select(`.${chartDiv}-${i}`)
-      .style("fill", "black")
       .append("g")
         .attr("class", "text-group");
   
@@ -110,21 +109,25 @@ function createCharts(type, chartDiv, data) {
       .attr('dy', '.6em')
       .style("fill", d => color(i));
 
-    d3.selectAll(`.${chartDiv}-legend-text`).style("opacity", 0.2);
-    d3.select(`.${chartDiv}-legend-text-${i}`).style("opacity", 1);
-
+    d3.selectAll(`.${chartDiv}-pie-slice`).select('path')
+      .style("opacity", 0.2);
     d3.select(`.${chartDiv}-${i}`).select('path')
-      .style("fill", "black");
+      .style("opacity", 1);
+
+    d3.selectAll(`.${chartDiv}-legend-text`)
+      .style("opacity", 0.2);
+    d3.select(`.${chartDiv}-legend-text-${i}`)
+      .style("opacity", 1);
   }
 
   function handleMouseOut(d, i) {
     d3.select(`.${chartDiv}-${i}`)
-      .style("fill", color(i))
       .select(".text-group").remove();
 
-    d3.selectAll(`.${chartDiv}-legend-text`).style("opacity", 1);
-    d3.select(`.${chartDiv}-${i}`).select('path')
-      .style("fill", color(i));
+    d3.selectAll(`.${chartDiv}-legend-text`)
+      .style("opacity", 1);
+    d3.selectAll(`.${chartDiv}-pie-slice`).select('path')
+      .style("opacity", 1);
   }
 
 }

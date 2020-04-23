@@ -57,7 +57,7 @@ g.append("text")
     .attr("x", width/4)
     .attr("y", 0)
     .attr("fill", "#000000")
-    .text("Proportion of population that has been a contestant on Jeopardy");
+    .text("Proportion of contestants per population");
 
 g.call(d3.axisBottom(xScale)
     .tickSize(15)
@@ -144,7 +144,7 @@ function createMap([us]) {
       <h3>2019 Population</h3>
       <p>${d.population}</p>
       <h3>Contestants</h3>
-      <p>${d.contestants}</p>
+      <p>${(+d.contestants).toLocaleString()}</p>
       <h3>Proportion</h3>
       <p>1 contestant / ${Math.round(d.proportion).toLocaleString()} people</p>
     `)

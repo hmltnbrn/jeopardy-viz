@@ -62,8 +62,9 @@
           <div class="gender-by-charts">
             <div class="gender-blurb">
               <h3>Who Wins?</h3>
-              <p>By the end of an episode, the contestant with the most money is declared the winner. They are allowed to come back to the next game and defend their win. Some are good enough to win multiple games and continue on and on until they lose. I grouped together the data in a way that shows the gender disparity in number of wins. The vast majority of contestants have only one win and I wanted to show this versus those who win more than once.</p>
-              <p>I created a stacked bar chart to show the breakdown of wins. Hover over the bars to get more detailed numbers.</p>
+              <p>By the end of an episode, the contestant with the most money is declared the winner. They are allowed to come back to the next game and defend their win. Some are good enough to win multiple games and continue on and on until they lose. I grouped together the data in a way that shows the gender disparity in number of wins.</p>
+              <p>There is some disparity in the data between this and the total number of contestants by gender. Some games on J! Archive (and by extension, my own database) are incomplete. I did my best to account for this by having a boolean field in the database for indicating that the game had an unknown winner. Even with that, some contestants may be counted twice. However, it should be a very small number.</p>
+              <p>I created a stacked bar chart to show this breakdown. Hover over the bars to get more detailed numbers.</p>
             </div>
             <div id="gender-by-wins"></div>
           </div>
