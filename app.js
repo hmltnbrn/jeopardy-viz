@@ -7,9 +7,9 @@ const sslRedirect = require('heroku-ssl-redirect');
 
 const app = express();
 
-app.use('/', express.static(path.join(__dirname, 'dist')));
-
 app.use(sslRedirect(['production']));
+
+app.use('/', express.static(path.join(__dirname, 'dist')));
 
 app.use(logger('dev'));
 app.use(express.json());
