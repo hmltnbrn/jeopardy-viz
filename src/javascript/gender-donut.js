@@ -6,8 +6,8 @@ import '../sass/gender.scss';
 const episodeKey = {
   "3w-0m": "3 women/0 men",
   "2w-1m": "2 women/1 man",
-  "1w-2m": "2 men/1 woman",
-  "0w-3m": "3 men/0 women"
+  "2m-1w": "2 men/1 woman",
+  "3m-0w": "3 men/0 women"
 };
 
 const promises = [
@@ -92,21 +92,20 @@ function createCharts(type, chartDiv, data) {
   
   function handleMouseOver(d, i) {
     let g = d3.select(`.${chartDiv}-${i}`)
-      .style("cursor", "pointer")
       .style("fill", "black")
       .append("g")
         .attr("class", "text-group");
   
     g.append("text")
       .attr("class", "name-text")
-      .text(`${d.data.key}`)
+      .text(`${d.data.key.replace('-', '/')}`)
       .attr('text-anchor', 'middle')
       .attr('dy', '-1.2em')
       .style("fill", d => color(i));
 
     g.append("text")
       .attr("class", "value-text")
-      .text(`${d.data.value} (${d.data.perc}%)`)
+      .text(`${(+d.data.value).toLocaleString()} (${d.data.perc}%)`)
       .attr('text-anchor', 'middle')
       .attr('dy', '.6em')
       .style("fill", d => color(i));
@@ -115,19 +114,16 @@ function createCharts(type, chartDiv, data) {
     d3.select(`.${chartDiv}-legend-text-${i}`).style("opacity", 1);
 
     d3.select(`.${chartDiv}-${i}`).select('path')
-      .style("cursor", "pointer")
       .style("fill", "black");
   }
 
   function handleMouseOut(d, i) {
     d3.select(`.${chartDiv}-${i}`)
-      .style("cursor", "none")  
       .style("fill", color(i))
       .select(".text-group").remove();
 
     d3.selectAll(`.${chartDiv}-legend-text`).style("opacity", 1);
     d3.select(`.${chartDiv}-${i}`).select('path')
-      .style("cursor", "none")
       .style("fill", color(i));
   }
 

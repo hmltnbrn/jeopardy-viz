@@ -3,11 +3,6 @@ import { responsive } from './helper';
 
 import '../sass/gender.scss';
 
-const toolDiv = d3.select("body")
-  .append("div")
-    .attr("class", "gender-tooltip")
-    .style("opacity", 0);
-
 d3.csv("../data/gender-by-wins.csv").then(data => {
   const keys = data.columns.slice(1);
   const margin = { top: 10, right: 20, bottom: 30, left: 30 };
@@ -29,15 +24,15 @@ d3.csv("../data/gender-by-wins.csv").then(data => {
   const y = d3.scaleLinear()
     .rangeRound([height - margin.bottom, margin.top])
 
-  const xAxis = svg.append("g")
+  svg.append("g")
     .attr("transform", `translate(0,${height - margin.bottom})`)
     .attr("class", "x-axis")
 
-  const yAxis = svg.append("g")
+  svg.append("g")
     .attr("transform", `translate(${margin.left},0)`)
     .attr("class", "y-axis")
 
-  const z = d3.scaleOrdinal()
+  const color = d3.scaleOrdinal()
     .range(["steelblue", "darkorange"])
     .domain(keys);
 
@@ -61,7 +56,7 @@ d3.csv("../data/gender-by-wins.csv").then(data => {
 
   group.enter().append("g")
     .classed("layer", true)
-    .attr("fill", d => z(d.key));
+    .attr("fill", d => color(d.key));
 
   const bars = svg.selectAll("g.layer").selectAll("rect")
     .data(d => d, e => e.data.Gender);
@@ -69,6 +64,7 @@ d3.csv("../data/gender-by-wins.csv").then(data => {
   bars.exit().remove();
 
   bars.enter().append("rect")
+    .attr('class', (d, i) => `rect-${d.data.Gender}-${d[0]}`)
     .attr("width", x.bandwidth())
     .merge(bars)
     .attr("x", d => x(d.data.Gender))
@@ -77,18 +73,18 @@ d3.csv("../data/gender-by-wins.csv").then(data => {
     .on("mouseover", handleMouseOver)
     .on("mouseout", handleMouseOut);
 
-  const text = svg.selectAll(".text")
+  const text = svg.selectAll(".desc-text")
     .data(data, d => d.Gender);
 
   text.exit().remove();
 
   text.enter().append("text")
-    .attr("class", "text")
+    .attr("class", d => `desc-text ${d.Gender}-text`)
     .attr("text-anchor", "middle")
     .merge(text)
     .attr("x", d => x(d.Gender) + x.bandwidth() / 2)
     .attr("y", d => y(d.total) - 5)
-    .text(d => d.total);
+    .text(d => d.total.toLocaleString());
 
   const legend = d3.select('#gender-by-wins')
     .append("div")
@@ -99,28 +95,25 @@ d3.csv("../data/gender-by-wins.csv").then(data => {
     .enter().append("div")
       .attr("class", (d, i) => `legend-text legend-text-${i}`)
       .style("color", d => {
-        return z(d);
+        return color(d);
       })
       .text(d => {
         return d;
       });
 
-  function handleMouseOver(d) {
+  function handleMouseOver(d, i) {
     let mouseTotal = d[1] - d[0];
-    toolDiv.transition()
-      .duration(200)
-      .style("opacity", .9);
-    toolDiv.html(`
-      <h2>${d[0] === 0 ? 'Exactly One Win' : 'More Than One Win'}</h2>
-      <p>${mouseTotal}</p>
-    `)
-      .style("left", (d3.event.pageX) + "px")
-      .style("top", (d3.event.pageY - 28) + "px");
+    d3.selectAll('rect').style("opacity", 0.2);
+    d3.select(`.rect-${d.data.Gender}-${d[0]}`).style("opacity", 1);
+    d3.selectAll('.desc-text').style("opacity", 0.2);
+    d3.select(`.${d.data.Gender}-text`)
+      .style("opacity", 1)
+      .text(mouseTotal.toLocaleString());
   }
 
-  function handleMouseOut() {
-    toolDiv.transition()
-      .duration(500)
-      .style("opacity", 0);
+  function handleMouseOut(d) {
+    d3.selectAll('rect').style("opacity", 1);
+    d3.select(`.${d.data.Gender}-text`).text(d.data.total.toLocaleString());
+    d3.selectAll('.desc-text').style("opacity", 1);
   }
 });
