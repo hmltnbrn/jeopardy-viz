@@ -103,17 +103,30 @@ d3.csv("../data/gender-by-wins.csv").then(data => {
 
   function handleMouseOver(d) {
     let mouseTotal = d[1] - d[0];
-    d3.selectAll('.rect-win').style("opacity", 0.2);
-    d3.select(`.rect-win-${d.data.Gender}-${d[0]}`).style("opacity", 1);
-    d3.selectAll('.desc-win-text').style("opacity", 0.2);
+    d3.selectAll('.rect-win')
+      .transition().duration(200)
+      .style("opacity", 0.2);
+    d3.select(`.rect-win-${d.data.Gender}-${d[0]}`)
+      .transition().duration(200)
+      .style("opacity", 1);
+    d3.selectAll('.desc-win-text')
+      .transition().duration(200)
+      .style("opacity", 0.2);
     d3.select(`.${d.data.Gender}-win-text`)
+      .transition().duration(200)
       .style("opacity", 1)
       .text(`${mouseTotal.toLocaleString()} (${(mouseTotal/d.data.total*100).toFixed(1)}%)`);
   }
 
   function handleMouseOut(d) {
-    d3.selectAll('.rect-win').style("opacity", 1);
-    d3.select(`.${d.data.Gender}-win-text`).text(d.data.total.toLocaleString());
-    d3.selectAll('.desc-win-text').style("opacity", 1);
+    d3.selectAll('.rect-win')
+      .transition().duration(200)
+      .style("opacity", 1);
+    d3.select(`.${d.data.Gender}-win-text`)
+      .transition().duration(200)
+      .text(d.data.total.toLocaleString());
+    d3.selectAll('.desc-win-text')
+      .transition().duration(200)
+      .style("opacity", 1);
   }
 });

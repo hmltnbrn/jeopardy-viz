@@ -33,8 +33,18 @@
       </section>
       <section>
         <h2>State-by-State Contestants</h2>
-        <p>While looking at the data I collected from the archive, I noticed that most contestants were identified by their name, hometown, and profession. I stripped out their local town and isolated each one that was from the fifty U.S. states and the District of Columbia. From here, I took a count of how many came from each state, making sure to only count each contestant once.</p>
-        <p>After I had this list, I compared it to <a href="https://www.census.gov/newsroom/press-kits/2019/national-state-estimates.html" target="_blank">population estimates made by the U.S. Census Bureau for 2019</a>, creating a proportion of number of contestants to the total population. Below, I created a map of the United States and the District of Columbia, shading each state by the size of the proportion; the darker shade, the larger the proportion, and vice versa. Hover over each state to see more detailed information.</p>
+        <p>While looking at the data I collected from the archive, I noticed that most contestants were identified by their name, hometown, and profession. I stripped out their local town and isolated each one that was from the fifty U.S. states and the District of Columbia. From here, I took a count of how many came from each state and how many won at least one game, making sure to only count each contestant once.</p>
+        <p>After I had this list, I compared it to <a href="https://www.census.gov/newsroom/press-kits/2019/national-state-estimates.html" target="_blank">population estimates made by the U.S. Census Bureau for 2019</a>, creating a proportion of number of contestants/winners to the total population. Below, I created a map of the United States and the District of Columbia, shading each state by the size of the proportion; the darker shade, the larger the proportion, and vice versa. Use the two buttons to switch between the two views and hover over each state to see more detailed information.</p>
+        <div class="state-radios">
+          <div class="radio-container">
+            <input type="radio" id="contestant-radio" name="state-view" value="contestants" checked/>
+            <label for="contestant-radio">Contestants</label>
+          </div>
+          <div class="radio-container">
+            <input type="radio" id="winner-radio" name="state-view" value="winners"/>
+            <label for="winner-radio">Winners</label>
+          </div>
+        </div>
         <div id="state-chart"></div>
       </section>
       <section>

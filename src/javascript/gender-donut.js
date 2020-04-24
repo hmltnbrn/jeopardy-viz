@@ -100,23 +100,29 @@ function createCharts(type, chartDiv, data) {
       .text(`${d.data.key.replace('-', '/')}`)
       .attr('text-anchor', 'middle')
       .attr('dy', '-1.2em')
-      .style("fill", d => color(i));
+      .style("fill", d => color(i))
+      .transition().duration(200);
 
     g.append("text")
       .attr("class", "value-text")
       .text(`${(+d.data.value).toLocaleString()} (${d.data.perc}%)`)
       .attr('text-anchor', 'middle')
       .attr('dy', '.6em')
-      .style("fill", d => color(i));
+      .style("fill", d => color(i))
+      .transition().duration(200);
 
     d3.selectAll(`.${chartDiv}-pie-slice`).select('path')
+      .transition().duration(200)
       .style("opacity", 0.2);
     d3.select(`.${chartDiv}-${i}`).select('path')
+      .transition().duration(200)
       .style("opacity", 1);
 
     d3.selectAll(`.${chartDiv}-legend-text`)
+      .transition().duration(200)
       .style("opacity", 0.2);
     d3.select(`.${chartDiv}-legend-text-${i}`)
+      .transition().duration(200)
       .style("opacity", 1);
   }
 
@@ -125,8 +131,10 @@ function createCharts(type, chartDiv, data) {
       .select(".text-group").remove();
 
     d3.selectAll(`.${chartDiv}-legend-text`)
+      .transition().duration(200)
       .style("opacity", 1);
     d3.selectAll(`.${chartDiv}-pie-slice`).select('path')
+      .transition().duration(200)
       .style("opacity", 1);
   }
 

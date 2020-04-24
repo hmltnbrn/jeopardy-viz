@@ -8,11 +8,42 @@
   stroke-linejoin: round;
 }
 
+.state-radios {
+  display: flex;
+  justify-content: center;
+  margin: 25px;
+  .radio-container {
+    position: relative;
+    margin: 5px;
+  }
+  input[type="radio"] {
+    opacity: 0.011;
+    z-index: -1;
+    position: absolute;
+  }
+  input[type="radio"]:checked + label {
+    background: #00003A;
+    color: #ffffff;
+  }
+  label {
+    font-size: 18px;
+    background: #efeff1;
+    color: #d2d1d5;
+    padding: 15px 30px;
+    cursor: pointer;
+    z-index: 90;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    height: 100%;
+  }
+}
+
 div.state-tooltip {	
   position: absolute;
   padding: 20px;
   font-size: 12px;
-  background: #000000;
+  background: #00003A;
   color: #ffffff;
   border: 0px;
   border-radius: 8px;

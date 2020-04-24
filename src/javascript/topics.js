@@ -49,7 +49,7 @@ d3.select('body')
   .on("click", () => {
     if(clicked) {
       d3.selectAll('.topic-line').style("opacity", 0.2);
-      d3.selectAll('.legend-text').style("opacity", 1);
+      d3.selectAll('.topic-legend-text').style("opacity", 1);
       clicked = false;
     }
   });

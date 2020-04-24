@@ -12,12 +12,10 @@ module.exports = {
     genderLine: './src/javascript/gender-line.js',
     genderTopic: './src/javascript/gender-topic.js'
   },
-
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-
   module: {
     rules: [
       {
@@ -95,13 +93,9 @@ module.exports = {
       }
     ]
   },
-
   resolve: {
     extensions: ['.js', '.scss']
   },
-
-  devtool: "eval-source-map",
-
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({
@@ -123,6 +117,4 @@ module.exports = {
       chunks: ['main']
     })
   ],
-
-  mode: 'development'
 };
