@@ -58,6 +58,36 @@
             <div id="gender-by-episode-chart"></div>
           </div>
         </div>
+        <div class="gender-topic-charts">
+          <div class="gender-by-charts">
+            <div class="gender-blurb">
+              <h3>Are Topics Gendered?</h3>
+              <p>I wanted to see if the topics that I generated using the topic modeling were gendered--as in, are certain genders more likely to both know the answer and get it right. My database includes information on which clues a contestant got right and which they got wrong. I grouped this all together by gender and did a chi-squared test to see if the difference between the genders is significant.</p>
+              <p>Use the select field below to update the stacked bar chart and show the results of the chi-squared test for each topic. Hover over the bars to get more detailed numbers.</p>
+              <div class="styled-select">
+                <select id="topic-selector"></select>
+              </div>
+              <div class="chi-square-container">
+                <div>
+                  <h4>Chi-Square</h4>
+                  <p class="chi-square"></p>
+                </div>
+                <div>
+                  <h4>Critical Value</h4>
+                  <p class="critical-value"></p>
+                </div>
+                <div>
+                  <h4>P-Value</h4>
+                  <p class="p-value"></p>
+                </div>
+                <p class="chi-significance"></p>
+              </div>
+            </div>
+            <div id="gender-by-topics">
+              <h4 class="gender-by-topics-title">Religion</h4>
+            </div>
+          </div>
+        </div>
         <div class="gender-win-charts">
           <div class="gender-by-charts">
             <div class="gender-blurb">

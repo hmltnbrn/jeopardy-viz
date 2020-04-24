@@ -9,7 +9,8 @@ module.exports = {
     states: './src/javascript/states.js',
     genderDonut: './src/javascript/gender-donut.js',
     genderBar: './src/javascript/gender-bar.js',
-    genderLine: './src/javascript/gender-line.js'
+    genderLine: './src/javascript/gender-line.js',
+    genderTopic: './src/javascript/gender-topic.js'
   },
 
   output: {
@@ -107,7 +108,7 @@ module.exports = {
       template: './src/index.html',
       filename: './index.html',
       inject: true,
-      chunks: ['main', 'topics', 'states', 'genderDonut', 'genderBar', 'genderLine']
+      chunks: ['main', 'topics', 'states', 'genderDonut', 'genderBar', 'genderLine', 'genderTopic']
     }),
     new HtmlWebPackPlugin({
       template: './src/about.html',

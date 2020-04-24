@@ -22,7 +22,8 @@ polyline {
   }
 }
 
-.gender-win-charts {
+.gender-win-charts,
+.gender-topic-charts {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -47,6 +48,33 @@ div.gender-tooltip {
   pointer-events: none;
   p {
     margin-top: 5px;
+  }
+}
+
+.gender-by-topics-title {
+  text-align: center;
+}
+
+.styled-select {
+  select {
+    background: #e6e7e9;
+    padding: 10px 15px;
+    font-size: 20px;
+    line-height: 1;
+    border: 0;
+    border-radius: 0;
+    outline: none;
+    height: 50px;
+    color: #5a5e67;
+    margin: 0 0 20px 0;
+    width: 100%;
+  }
+}
+
+.chi-square-container {
+  h4 {
+    font-weight: 500;
+    margin-bottom: 5px;
   }
 }
 
@@ -80,7 +108,8 @@ div.gender-tooltip {
       padding-right: 0;
     }
   }
-  .gender-win-charts {
+  .gender-win-charts,
+  .gender-topic-charts {
     .gender-by-charts {
       flex-direction: column;
       & > div {
