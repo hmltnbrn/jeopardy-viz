@@ -5,7 +5,7 @@ import '../sass/gender.scss';
 
 d3.csv("../data/gender-by-wins.csv").then(data => {
   const keys = data.columns.slice(1);
-  const margin = { top: 10, right: 20, bottom: 30, left: 30 };
+  const margin = { top: 10, right: 30, bottom: 30, left: 30 };
   const width = 650 - margin.left - margin.right;
   const height = 400 - margin.top - margin.bottom;
 
@@ -31,6 +31,15 @@ d3.csv("../data/gender-by-wins.csv").then(data => {
   svg.append("g")
     .attr("transform", `translate(${margin.left},0)`)
     .attr("class", "y-axis");
+
+  svg.append("text")
+    .attr('class', 'y-text')
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x", 0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Games");
 
   const color = d3.scaleOrdinal()
     .range(d3.schemeCategory10)

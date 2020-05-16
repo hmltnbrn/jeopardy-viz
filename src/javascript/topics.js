@@ -3,15 +3,15 @@ import { responsive } from './helper';
 
 import '../sass/topics.scss';
 
-const margin = { top: 10, right: 20, bottom: 30, left: 30 };
+const margin = { top: 20, right: 30, bottom: 50, left: 30 };
 
-const width = 400 - margin.left - margin.right;
-const height = 200 - margin.top - margin.bottom;
+const width = 800 - margin.left - margin.right;
+const height = 400 - margin.top - margin.bottom;
 
 const parseDate = d3.timeParse("%Y");
 
-const xScale = d3.scaleTime().range([0, width]);
-const yScale = d3.scaleLinear().range([height, 0]);
+const xScale = d3.scaleTime().range([margin.left, width - margin.right]);
+const yScale = d3.scaleLinear().range([height, margin.top]);
 const color = d3.scaleOrdinal().range(d3.schemeCategory10);
 
 const xAxis = d3.axisBottom().scale(xScale);
@@ -107,16 +107,23 @@ d3.csv("../data/topics.csv").then(data => {
       .on("mouseout", handleMouseOut)
       .on("click", handleClick);
 
-  svg
-    .append("g")
-      .attr("class", "x axis")
-      .attr("transform", `translate(0, ${height})`)
-      .call(xAxis);
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", `translate(0, ${height})`)
+    .call(xAxis);
 
-  svg
-    .append("g")
-      .attr("class", "y axis")
-      .call(yAxis);
+  svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", `translate(${margin.left}, 0)`)
+    .call(yAxis);
+
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x", 0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("% of Clues");
 
   const legend = d3.select(".topic-modeling")
     .append("div")

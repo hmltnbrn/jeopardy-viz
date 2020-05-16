@@ -29,7 +29,7 @@
           <code>python scrape.py --help</code>
         </div>
         <p>Before running the script above, you will need to have set up your own database. The database itself is relational, allowing for the different tables to be connected through foreign keys. You can create your own database by installing <a href="https://www.postgresql.org/" target="_blank">PostgreSQL</a> and running the SQL code in <a href="https://github.com/hmltnbrn/jeopardy-scrape/tree/master/database" target="_blank">database/create.sql</a> once you have created a database. Below is an entiy-relationship diagram that details the columns and illustrates the connection between the tables.</p>
-        <img src="./images/er-diagram.png"/>
+        <img class="full-image" src="./images/er-diagram.png" alt="Entiy-relationship diagram"/>
         <p>I used the information on each contestant to classify them by a male/female gender. While reductive, it would help in doing further analysis of the data. Run the commands below to send the first name for each contestant to <a href="https://genderize.io/" target="_blank">Genderize.io</a>, a third-party API for identifying gender by name, and update the database accordingly.</p>
         <div class="code">
           <code>cd addon</code>
@@ -168,7 +168,9 @@
       </section>
       <section>
         <h2>Analysis and Visualization</h2>
-        <p>To create this site, I used <a href="https://nodejs.org/en/" target="_blank">Node.js</a> and <a href="https://expressjs.com/" target="_blank">Express</a> for the server infrastructure and <a href="https://d3js.org/" target="_blank">D3.js</a> for the front-end visualizations. The site also makes use of preprocessors like <a href="https://sass-lang.com/" target="_blank">SASS</a> and <a href="https://webpack.js.org/" target="_blank">Webpack</a> to create the production-ready files. You can find the GitHub repository for the site <a href="https://github.com/hmltnbrn/jeopardy-viz" target="_blank">here</a>.</p>
+        <p>To create this site, I used <a href="https://nodejs.org/en/" target="_blank">Node.js</a> and <a href="https://expressjs.com/" target="_blank">Express</a> for the server infrastructure and <a href="https://d3js.org/" target="_blank">D3.js v5</a> for the front-end visualizations. The site also makes use of preprocessors like <a href="https://sass-lang.com/" target="_blank">SASS</a> and <a href="https://webpack.js.org/" target="_blank">Webpack</a> to create the production-ready files. You can find the GitHub repository for the site <a href="https://github.com/hmltnbrn/jeopardy-viz" target="_blank">here</a>.</p>
+        <p>I used a type of statistical analysis called a chi-squared test to compare the differences between men and women and their answers to the clues. Below is a example of the Excel spreadsheet for one of the calculations.</p>
+        <img src="./images/chi-square.png" alt="Religion chi-squared test"/>
       </section>
     </div>
   </main>

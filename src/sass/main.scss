@@ -92,8 +92,10 @@ main {
 }
 
 img {
-  width: 100%;
   margin-bottom: 20px;
+  &.full-image {
+    width: 100%;
+  }
 }
 
 table {

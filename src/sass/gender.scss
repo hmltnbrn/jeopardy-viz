@@ -33,6 +33,7 @@ polyline {
     margin-bottom: 20px;
     & > div {
       width: 50%;
+      margin-right: 10px;
     }
   }
 }
@@ -93,7 +94,7 @@ div.gender-tooltip {
 .contestant-line {
   fill: none;
   stroke: #000000;
-  stroke-width: 1px;
+  stroke-width: 2px;
 }
 
 #gender-by-winnings {
@@ -114,6 +115,7 @@ div.gender-tooltip {
       flex-direction: column;
       & > div {
         width: 100%;
+        margin: 0;
       }
     }
   }

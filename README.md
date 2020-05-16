@@ -22,7 +22,7 @@ This is the underlying code for my [analysis of Jeopardy!](https://jeopardy.bria
     yarn run dev
     ```
 
-5. In order to do a production build, run the commands below. Navigate to [http://localhost:3000](http://localhost:8080).
+5. In order to do a production build, run the commands below. Navigate to [http://localhost:8080](http://localhost:8080).
 
     ```
     yarn run build
