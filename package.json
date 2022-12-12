@@ -13,7 +13,7 @@
     "d3": "^5.15.0",
     "d3-queue": "^3.0.7",
     "debug": "~4.1.1",
-    "express": "^4.16.1",
+    "express": "^4.17.3",
     "heroku-ssl-redirect": "^0.0.4",
     "http-errors": "^1.6.3",
     "morgan": "^1.9.1",
